@@ -1,0 +1,29 @@
+{
+  "feature_names": [
+    "x_mean",
+    "x_std",
+    "x_min",
+    "x_max",
+    "y_mean",
+    "y_std",
+    "y_min",
+    "y_max",
+    "z_mean",
+    "z_std",
+    "z_min",
+    "z_max",
+    "mag_mean",
+    "mag_std",
+    "mag_min",
+    "mag_max"
+  ],
+  "class_names": [
+    "Sitting",
+    "Standing",
+    "Laying"
+  ],
+  "n_features": 16,
+  "n_classes": 3,
+  "train_accuracy": 0.964340608668921,
+  "val_accuracy": 0.9447174447174447
+}

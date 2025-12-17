@@ -1,0 +1,209 @@
+{
+  "app_name": "Museu+ Guia Adaptativo",
+  "team": "Grupo Daniel e Pedro",
+
+  "application_basics": {
+    "name": "Museu+ Guia Adaptativo",
+    "purpose": "Adaptar conteúdo e apresentação conforme perfil, interesses, tempo disponível e acessibilidade do visitante.",
+    "target_users": "Visitantes de museus com diferentes perfis, idiomas e necessidades de acessibilidade."
+  },
+
+  "context_information": {
+    "user_context": {
+      "profile_type": ["adult", "teen", "child", "expert", "casual"],
+      "interests": [
+        "painting",
+        "sculpture",
+        "history",
+        "science",
+        "photography",
+        "architecture",
+        "modern_art"
+      ],
+      "language": ["pt", "en", "es", "fr", "de"],
+      "accessibility": [
+        "none",
+        "audio_description",
+        "sign_language",
+        "high_contrast",
+        "large_text"
+      ],
+      "companions": ["alone", "family", "school_group", "friends"],
+      "pace_preference": ["fast", "balanced", "slow"]
+    },
+    "device_context": {
+      "battery_state": ["high", "medium", "low", "critical"],
+      "connection": ["wifi", "mobile_data", "offline"],
+      "form_factor": ["phone", "tablet", "kiosk"]
+    },
+    "environment_context": {
+      "time_available": ["<30min", "30-60min", "60-120min", ">120min"],
+      "gallery_density": ["quiet", "moderate", "crowded"],
+      "lighting": ["dim", "normal", "bright"],
+      "location_zone": [
+        "lobby",
+        "gallery_a",
+        "gallery_b",
+        "temporary_exhibit",
+        "cafe",
+        "shop"
+      ]
+    }
+  },
+
+  "context_sources": {
+    "sensors_used": [
+      "beacon_proximity",
+      "wifi_rssi",
+      "compass",
+      "accelerometer"
+    ],
+    "inference_methods": [
+      "location_fusion",
+      "time_budget_planner",
+      "interest_ranker"
+    ],
+    "external_data_sources": [
+      "museum_catalog_api",
+      "exhibit_metadata_api",
+      "translation_service"
+    ]
+  },
+
+  "adaptation_rules": [
+    {
+      "rule_name": "TimeBudgetShortTour",
+      "when": "environment.time_available == '<30min'",
+      "then": [
+        "prioritize_top_5_highlights",
+        "short_form_content",
+        "optimize_route_min_distance"
+      ],
+      "priority": "high",
+      "because": "tempo curto requer roteiro compacto"
+    },
+    {
+      "rule_name": "FamilyFriendlyMode",
+      "when": "user.companions == 'family' || user.profile_type == 'child'",
+      "then": [
+        "enable_kid_friendly_content",
+        "simplify_language",
+        "add_interactive_prompts"
+      ],
+      "priority": "high",
+      "because": "adequar linguagem e engajamento para crianças/família"
+    },
+    {
+      "rule_name": "ExpertDeepDive",
+      "when": "user.profile_type == 'expert' && user.pace_preference != 'fast'",
+      "then": [
+        "enable_scholarly_notes",
+        "show_provenance_and_references",
+        "long_form_content"
+      ],
+      "priority": "medium",
+      "because": "público especialista deseja conteúdo aprofundado"
+    },
+    {
+      "rule_name": "InterestPersonalization",
+      "when": "any(user.interests) && environment.location_zone in ['gallery_a','gallery_b','temporary_exhibit']",
+      "then": [
+        "rank_content_by_interest",
+        "surface_related_artifacts",
+        "highlight_contextual_stories"
+      ],
+      "priority": "high",
+      "because": "alinhar conteúdo ao interesse declarado"
+    },
+    {
+      "rule_name": "AccessibilityAdjustments",
+      "when": "user.accessibility != 'none'",
+      "then": [
+        "enable_accessibility_pack",
+        "adapt_contrast_and_text_size",
+        "offer_alt_modalities"
+      ],
+      "priority": "high",
+      "because": "atender necessidades de acessibilidade"
+    },
+    {
+      "rule_name": "CrowdAwareRouting",
+      "when": "environment.gallery_density == 'crowded'",
+      "then": [
+        "reroute_to_less_crowded",
+        "async_queue_info",
+        "condense_guidance"
+      ],
+      "priority": "medium",
+      "because": "evitar áreas lotadas e melhorar experiência"
+    },
+    {
+      "rule_name": "LowBatteryMode",
+      "when": "device.battery_state in ['low','critical']",
+      "then": [
+        "save_power",
+        "prefer_offline_assets",
+        "reduce_background_updates"
+      ],
+      "priority": "high",
+      "because": "preservar bateria do dispositivo"
+    },
+    {
+      "rule_name": "LanguageLocalization",
+      "when": "user.language != 'pt'",
+      "then": ["translate_ui_and_content", "surface_audio_in_user_language"],
+      "priority": "medium",
+      "because": "oferecer conteúdo no idioma do visitante"
+    }
+  ],
+
+  "adaptations": {
+    "interface": [
+      "simplify_navigation",
+      "adapt_contrast_and_text_size",
+      "condensed_banner",
+      "multi_language_ui"
+    ],
+    "content": [
+      "short_form_content",
+      "long_form_content",
+      "kid_friendly_content",
+      "scholarly_notes",
+      "rank_content_by_interest",
+      "surface_related_artifacts",
+      "highlight_contextual_stories",
+      "translate_ui_and_content"
+    ],
+    "behavior": [
+      "optimize_route_min_distance",
+      "reroute_to_less_crowded",
+      "async_queue_info",
+      "save_power",
+      "prefer_offline_assets",
+      "reduce_background_updates",
+      "surface_audio_in_user_language",
+      "enable_accessibility_pack",
+      "add_interactive_prompts"
+    ]
+  },
+
+  "validation": {
+    "constraints": [
+      "priority must be one of ['high','medium','low']",
+      "every rule must have 'when' and 'then'",
+      "then actions must exist in adaptations.interface/content/behavior"
+    ],
+    "edge_cases": [
+      "conflicting rules resolved by priority; tie-break by recency of context",
+      "offline: fallback to cached content and simplified route",
+      "unknown location_zone: show global highlights near lobby"
+    ]
+  },
+
+  "expected_user_experience": {
+    "short_visit_flow": "Apresenta top-5 destaques com rotas curtas e conteúdo resumido.",
+    "family_mode_flow": "Versões com linguagem simples, atividades interativas e trilhas infantis.",
+    "expert_mode_flow": "Conteúdo aprofundado, referências e notas curatoriais avançadas.",
+    "accessibility_flow": "UI ajustada e alternativas em áudio/gestual conforme necessidade."
+  }
+}
